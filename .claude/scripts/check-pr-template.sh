@@ -77,6 +77,7 @@ if [ ${#missing[@]} -gt 0 ]; then
     echo ""
     echo "以下のコマンドでPR本文を修正してください:"
     echo "  gh pr edit $pr_url"
+    exit 2
 fi
 
 exit 0
