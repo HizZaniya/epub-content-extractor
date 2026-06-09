@@ -27,7 +27,7 @@ def test_cli_extract_success_message(reflowable_epub: Path, tmp_path: Path) -> N
     assert "chapter" in result.output.lower() or "extracted" in result.output.lower()
 
 
-def test_cli_nonexistent_file(tmp_path: Path) -> None:
+def test_cli_nonexistent_file() -> None:
     result = runner.invoke(app, ["/nonexistent/path.epub"])
     assert result.exit_code != 0
 
