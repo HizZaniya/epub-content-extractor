@@ -25,6 +25,7 @@
 | `.gitignore` | Git 除外設定 |
 | `.devcontainer/Dockerfile` | 開発コンテナイメージ定義 |
 | `.devcontainer/devcontainer.json` | VS Code Dev Container 設定 |
+| `.devcontainer/postCreate.sh` | コンテナ初回起動時のセットアップスクリプト（uv sync + プラグインインストール等） |
 | `.claude/settings.json` | Claude Code プロジェクト設定 |
 | `.claude/rules/development.md` | 開発原則（TDD/YAGNI/SOLID/DRY） |
 | `.claude/scripts/check-pr-template.sh` | PRテンプレート検証 PostToolUse フック |
@@ -375,6 +376,7 @@ git commit -m "chore: .gitignoreを追加"
 **Files:**
 - Create: `.devcontainer/Dockerfile`
 - Create: `.devcontainer/devcontainer.json`
+- Create: `.devcontainer/postCreate.sh`
 
 - [ ] **Step 1: Dockerfile を作成する**
 
@@ -450,12 +452,48 @@ libjpeg-dev / libpng-dev は Pillow のビルド依存、libxml2-dev / libxslt1-
             }
         }
     },
-    "postCreateCommand": "mise trust && mise install && uv sync --dev && uv tool install ty && uv run pre-commit install",
+    "postCreateCommand": "bash .devcontainer/postCreate.sh",
     "remoteUser": "vscode"
 }
 ```
 
-- [ ] **Step 3: コミットする**
+- [ ] **Step 3: .devcontainer/postCreate.sh を作成する**
+
+コンテナ初回起動時に実行されるセットアップスクリプト。Claude Code プラグインのインストールを含める。
+`enabledPlugins` だけでは自動インストールされないため、`claude plugin install` で明示的にインストールする必要がある。
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Python/Node バージョンをインストール
+mise trust
+mise install
+
+# Python 依存関係をインストール
+uv sync --dev
+uv tool install ty
+
+# pre-commit フックをインストール
+uv run pre-commit install
+
+# Claude Code プラグインをインストール
+# settings.json の enabledPlugins で有効化されているが、
+# インストール自体は明示的に行う必要がある
+claude plugin install superpowers@claude-plugins-official
+claude plugin install pyright-lsp@claude-plugins-official
+claude plugin install context7@claude-plugins-official
+claude plugin install bash-language-server@claude-code-lsps
+claude plugin install criticalthink@criticalthink
+```
+
+作成後に実行権限を付与する:
+
+```bash
+chmod +x .devcontainer/postCreate.sh
+```
+
+- [ ] **Step 4: コミットする**
 
 ```bash
 git add .devcontainer/
@@ -1327,7 +1365,7 @@ find . -not -path './.git/*' -not -path './.venv/*' -not -path './.ruff_cache/*'
 - `src/epub_content_extractor/__init__.py`
 - `src/epub_content_extractor/__main__.py`
 - `tests/__init__.py`, `tests/test_package.py`
-- `.devcontainer/Dockerfile`, `.devcontainer/devcontainer.json`
+- `.devcontainer/Dockerfile`, `.devcontainer/devcontainer.json`, `.devcontainer/postCreate.sh`
 - `.claude/settings.json`, `.claude/rules/development.md`
 - `.claude/scripts/check-pr-template.sh`, `.claude/statusline.sh`
 - `.github/pull_request_template.md`, `.github/LABELS.yml`, `.github/FUNDING.yml`
