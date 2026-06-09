@@ -77,14 +77,18 @@ def _detect_layout(book: epub.EpubBook) -> Literal["reflowable", "fixed-layout",
         return "ahl"
     if fixed_count > 0 and global_layout == "reflowable":
         return "ahl"
-    return global_layout  # type: ignore[return-value]
+    if global_layout == "fixed-layout":
+        return "fixed-layout"
+    return "reflowable"
 
 
 def _detect_page_progression(book: epub.EpubBook) -> Literal["ltr", "rtl"]:
     for value, attrs in book.get_metadata("OPF", "meta"):
         if attrs.get("property") == "page-progression-direction":
-            if value in ("ltr", "rtl"):
-                return value  # type: ignore[return-value]
+            if value == "rtl":
+                return "rtl"
+            if value == "ltr":
+                return "ltr"
     return "ltr"
 
 
