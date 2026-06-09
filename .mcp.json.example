@@ -1,0 +1,12 @@
+{
+    "mcpServers": {
+        "epub-content-extractor": {
+            "command": "uvx",
+            "args": [
+                "--from",
+                "/path/to/epub-content-extractor",
+                "epub-extract"
+            ]
+        }
+    }
+}
