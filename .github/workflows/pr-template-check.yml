@@ -1,0 +1,40 @@
+name: PR Template Check
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches: [main]
+
+jobs:
+  validate-template:
+    name: PR Template Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate required sections and label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body ?? '';
+
+            const required = [
+              '## 概要',
+              '## ラベル',
+              '## 完了条件',
+              '## パフォーマンス影響',
+              '## レビュアーへの案内',
+            ];
+
+            const missing = required.filter(s => !body.includes(s));
+            const hasLabel = /- \[x\]/i.test(body);
+
+            const errors = [];
+            if (missing.length > 0) {
+              errors.push(`必須セクションが不足しています:\n${missing.map(s => `  • ${s}`).join('\n')}`);
+            }
+            if (!hasLabel) {
+              errors.push('ラベルが未選択です（## ラベル セクションで `- [x]` を1つチェックしてください）');
+            }
+
+            if (errors.length > 0) {
+              core.setFailed(errors.join('\n\n'));
+            }
