@@ -35,13 +35,14 @@
     }
   },
   "hooks": {
-    "PostToolUse": [
+    "PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/scripts/check-pr-template.sh"
+            "command": "bash .claude/scripts/check-pr-template.sh",
+            "statusMessage": "PRテンプレートを検証中..."
           }
         ]
       }

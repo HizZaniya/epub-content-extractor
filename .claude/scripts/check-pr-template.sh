@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PostToolUse hook: gh pr create 後にPRテンプレート必須セクションを検証する
+# PreToolUse hook: gh pr create 実行前にPRテンプレート必須セクションを検証する
 
 set -euo pipefail
 
@@ -19,30 +19,26 @@ if ! echo "$command" | grep -qE 'gh pr create'; then
     exit 0
 fi
 
-# ツール出力から PR URL を抽出
-output=$(echo "$input" | python3 -c "
-import sys, json
-try:
-    d = json.load(sys.stdin)
-    resp = d.get('tool_response', '')
-    if isinstance(resp, str):
-        print(resp)
-    elif isinstance(resp, dict):
-        print(resp.get('output', '') or resp.get('stdout', ''))
-    else:
-        print('')
-except Exception:
-    print('')
-" 2>/dev/null || true)
+# コマンドを一時ファイルに書き出し、gh を dummy 関数で置き換えて --body を抽出
+tmpfile=$(mktemp /tmp/pr-check-XXXXXX.sh)
+trap 'rm -f "$tmpfile"' EXIT
 
-pr_url=$(echo "$output" | grep -oE 'https://github\.com/[^[:space:]]+/pull/[0-9]+' | head -1 || true)
+cat > "$tmpfile" << 'FUNC'
+gh() {
+    local _capture_next=0
+    for _arg; do
+        if [[ $_capture_next -eq 1 ]]; then
+            printf '%s' "$_arg"
+            return 0
+        fi
+        [[ "$_arg" == '--body' ]] && _capture_next=1
+    done
+}
+FUNC
 
-if [ -z "$pr_url" ]; then
-    exit 0
-fi
+printf '%s\n' "$command" >> "$tmpfile"
 
-# PR 本文を取得
-body=$(gh pr view "$pr_url" --json body --jq '.body' 2>/dev/null || echo "")
+body=$(bash "$tmpfile" 2>/dev/null || true)
 
 if [ -z "$body" ]; then
     exit 0
@@ -70,14 +66,23 @@ if ! echo "$body" | grep -qE '\- \[x\]'; then
 fi
 
 if [ ${#missing[@]} -gt 0 ]; then
-    echo "⚠️  PRテンプレート検証失敗: 以下が不足または未入力です"
+    reason="PRテンプレート検証失敗: 以下が不足または未入力です"$'\n'
     for m in "${missing[@]}"; do
-        echo "  • $m"
+        reason+="  • $m"$'\n'
     done
-    echo ""
-    echo "以下のコマンドでPR本文を修正してください:"
-    echo "  gh pr edit $pr_url"
-    exit 2
+    reason+="PR本文を修正してから再実行してください。"
+
+    python3 -c "
+import json, sys
+reason = sys.argv[1]
+print(json.dumps({
+    'hookSpecificOutput': {
+        'hookEventName': 'PreToolUse',
+        'permissionDecision': 'deny',
+        'permissionDecisionReason': reason
+    }
+}))
+" "$reason"
 fi
 
 exit 0
