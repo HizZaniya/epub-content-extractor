@@ -38,6 +38,7 @@ Repository = "https://github.com/HizZaniya/epub-content-extractor"
 
 [project.scripts]
 epub-extract = "epub_content_extractor.__main__:main"
+epub-content-extractor = "epub_content_extractor.server:run"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/epub_content_extractor"]
