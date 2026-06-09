@@ -1,0 +1,24 @@
+# Claude Code
+.claude/settings.local.json
+
+# Serena
+.serena/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Tools cache
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Environment
+.env
+.env.*
+!.env.example
