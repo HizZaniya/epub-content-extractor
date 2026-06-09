@@ -1,0 +1,55 @@
+breaking-change:
+  color: "D93F0B"
+  description: "CLI/MCP tool signature or behavior change requiring user action"
+
+feature:
+  color: "0075CA"
+  description: "New CLI option or MCP tool"
+
+enhancement:
+  color: "A2EEEF"
+  description: "Improvement to existing feature or behavior"
+
+bug:
+  color: "D73A4A"
+  description: "Regression: something that used to work now doesn't"
+
+fix:
+  color: "E4E669"
+  description: "Non-regression defect fix"
+
+mcp:
+  color: "BFD4F2"
+  description: "FastMCP server layer changes (server.py)"
+
+extractor:
+  color: "C5DEF5"
+  description: "EPUB extraction core layer changes"
+
+devcontainer:
+  color: "F9D0C4"
+  description: "Dev Container / Dockerfile changes"
+
+performance:
+  color: "1D76DB"
+  description: "Measurable speed or memory improvement (benchmarks required)"
+
+docs:
+  color: "0075CA"
+  description: "Documentation only (README, comments, guides)"
+
+ci:
+  color: "FBCA04"
+  description: "GitHub Actions workflow changes"
+
+build:
+  color: "FBCA04"
+  description: "pyproject.toml, uv, or toolchain configuration"
+
+dependencies:
+  color: "0366D6"
+  description: "Dependency version bumps"
+
+skip-changelog:
+  color: "EEEEEE"
+  description: "Intentionally excluded from release notes"
