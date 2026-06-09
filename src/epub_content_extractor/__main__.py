@@ -1,5 +1,8 @@
+from epub_content_extractor.cli import app
+
+
 def main() -> None:
-    raise NotImplementedError
+    app()
 
 
 if __name__ == "__main__":
