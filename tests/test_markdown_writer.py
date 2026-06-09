@@ -105,4 +105,4 @@ def test_authors_in_front_matter(
     blocks: list[ContentBlock] = []
     write_chapter(blocks, sample_metadata, sample_spine_item, tmp_path)
     content = (tmp_path / "chapter_001.md").read_text(encoding="utf-8")
-    assert "- Author A" in content
+    assert '- "Author A"' in content

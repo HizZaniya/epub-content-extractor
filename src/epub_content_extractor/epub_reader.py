@@ -13,6 +13,11 @@ def read_epub(path: Path) -> tuple[EpubMetadata, list[SpineItem]]:
         raise FileNotFoundError(f"EPUB file not found: {path}")
 
     book = epub.read_epub(str(path), {"ignore_ncx": True})
+    return read_epub_book(book)
+
+
+def read_epub_book(book: epub.EpubBook) -> tuple[EpubMetadata, list[SpineItem]]:
+    """既に開かれた EpubBook からメタデータとスパインアイテムを返す。"""
     metadata = _extract_metadata(book)
     spine_items = _extract_spine(book)
     return metadata, spine_items

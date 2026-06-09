@@ -5,7 +5,7 @@ import ebooklib
 from ebooklib import epub
 
 from epub_content_extractor.content_converter import convert_html
-from epub_content_extractor.epub_reader import read_epub
+from epub_content_extractor.epub_reader import read_epub, read_epub_book
 from epub_content_extractor.image_extractor import extract_images
 from epub_content_extractor.markdown_writer import write_chapter
 from epub_content_extractor.models import ContentBlock
@@ -18,8 +18,10 @@ def extract_epub(epub_path: Path, output_dir: Path | None) -> dict:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    metadata, spine_items = read_epub(epub_path)
+    if not epub_path.exists():
+        raise FileNotFoundError(f"EPUB file not found: {epub_path}")
     book = epub.read_epub(str(epub_path), {"ignore_ncx": True})
+    metadata, spine_items = read_epub_book(book)
 
     image_mapping = extract_images(book, output_dir)
 

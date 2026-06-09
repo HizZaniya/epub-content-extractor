@@ -25,19 +25,29 @@ def write_chapter(
     return path
 
 
+def _yaml_str(value: str) -> str:
+    return value.replace('"', '\\"')
+
+
 def _front_matter(metadata: EpubMetadata, spine_item: SpineItem) -> str:
-    authors_yaml = "\n".join(f"  - {a}" for a in metadata.authors)
-    publisher = f'publisher: "{metadata.publisher}"' if metadata.publisher else "publisher: null"
+    authors_yaml = "\n".join(f'  - "{_yaml_str(a)}"' for a in metadata.authors)
+    publisher = (
+        f'publisher: "{_yaml_str(metadata.publisher)}"' if metadata.publisher else "publisher: null"
+    )
     identifier = (
-        f'identifier: "{metadata.identifier}"' if metadata.identifier else "identifier: null"
+        f'identifier: "{_yaml_str(metadata.identifier)}"'
+        if metadata.identifier
+        else "identifier: null"
     )
     chapter_title = (
-        f'chapter_title: "{spine_item.title}"' if spine_item.title else "chapter_title: null"
+        f'chapter_title: "{_yaml_str(spine_item.title)}"'
+        if spine_item.title
+        else "chapter_title: null"
     )
     return "\n".join(
         [
             "---",
-            f'title: "{metadata.title}"',
+            f'title: "{_yaml_str(metadata.title)}"',
             "authors:",
             authors_yaml,
             f"language: {metadata.language}",
