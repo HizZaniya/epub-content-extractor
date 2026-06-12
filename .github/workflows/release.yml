@@ -31,7 +31,9 @@ jobs:
         run: cz bump --yes
 
       - name: Push commit and tag
-        run: git push origin main --follow-tags
+        run: |
+          git push origin main
+          git push origin --tags
 
       - name: Create GitHub Release
         run: |
