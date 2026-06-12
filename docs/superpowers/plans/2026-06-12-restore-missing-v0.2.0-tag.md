@@ -15,7 +15,7 @@
 **Files:**
 - 変更なし（git タグ操作のみ）
 
-- [ ] **Step 1: 現在のタグ状態を確認する**
+- [x] **Step 1: 現在のタグ状態を確認する**
 
 ```bash
 git tag -l
@@ -24,7 +24,7 @@ git ls-remote --tags origin
 
 期待出力: どちらも空（タグが存在しないこと）
 
-- [ ] **Step 2: バンプコミットに v0.2.0 タグを作成する**
+- [x] **Step 2: バンプコミットに v0.2.0 タグを作成する**
 
 ```bash
 git tag v0.2.0 1b57f71
@@ -32,7 +32,7 @@ git tag v0.2.0 1b57f71
 
 期待出力: エラーなし（出力なし）
 
-- [ ] **Step 3: ローカルにタグが作成されたことを確認する**
+- [x] **Step 3: ローカルにタグが作成されたことを確認する**
 
 ```bash
 git tag -l
@@ -43,7 +43,7 @@ git tag -l
 v0.2.0
 ```
 
-- [ ] **Step 4: タグをリモートへ push する**
+- [x] **Step 4: タグをリモートへ push する**
 
 ```bash
 git push origin v0.2.0
@@ -56,7 +56,7 @@ To https://github.com/HizZaniya/epub-content-extractor.git
  * [new tag]         v0.2.0 -> v0.2.0
 ```
 
-- [ ] **Step 5: リモートにタグが反映されたことを確認する**
+- [x] **Step 5: リモートにタグが反映されたことを確認する**
 
 ```bash
 git ls-remote --tags origin
