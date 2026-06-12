@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Wait for TestPyPI propagation
-        run: sleep 30
+        run: sleep 60
 
       - uses: actions/setup-python@v5
         with:
