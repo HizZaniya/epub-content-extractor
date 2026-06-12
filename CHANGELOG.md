@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.1 (2026-06-12)
+
+### Fix
+
+- push tags explicitly to fix release workflow
+
 ## v0.2.0 (2026-06-12)
 
 ### Feat
