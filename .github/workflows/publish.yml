@@ -50,9 +50,34 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
 
+  verify-testpypi:
+    name: Verify TestPyPI install
+    needs: [build, publish-testpypi]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for TestPyPI propagation
+        run: sleep 60
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install from TestPyPI
+        run: |
+          pip install \
+            --index-url https://test.pypi.org/simple/ \
+            --extra-index-url https://pypi.org/simple/ \
+            "epub-content-extractor==${{ needs.build.outputs.version }}"
+
+      - name: Test import
+        run: python -c "import epub_content_extractor; print('Import OK')"
+
+      - name: Test CLI entry point
+        run: epub-extract --help
+
   publish-pypi:
     name: Publish to PyPI
-    needs: publish-testpypi
+    needs: verify-testpypi
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
