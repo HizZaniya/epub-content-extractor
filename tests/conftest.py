@@ -1,6 +1,13 @@
 import pytest
 from ebooklib import epub
 
+_MINIMAL_PNG: bytes = (
+    b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+    b"\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00"
+    b"\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00\x05\x18"
+    b"\xd8N\x00\x00\x00\x00IEND\xaeB`\x82"
+)
+
 
 @pytest.fixture
 def reflowable_epub(tmp_path):
@@ -86,18 +93,11 @@ def epub_with_image(tmp_path):
     book.set_language("ja")
     book.add_author("Test Author")
 
-    # 1x1の白ピクセルPNG(最小PNG)
-    png_bytes = (
-        b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
-        b"\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00"
-        b"\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00\x05\x18"
-        b"\xd8N\x00\x00\x00\x00IEND\xaeB`\x82"
-    )
     img = epub.EpubImage()
     img.id = "img1"
     img.file_name = "images/fig001.png"
     img.media_type = "image/png"
-    img.content = png_bytes
+    img.content = _MINIMAL_PNG
 
     ch1 = epub.EpubHtml(title="Chapter 1", file_name="chapter01.xhtml", lang="ja")
     ch1.content = (
@@ -122,18 +122,11 @@ def epub_with_image(tmp_path):
 
 
 @pytest.fixture
-def book_with_cover_item() -> epub.EpubBook:
-    """ITEM_COVER タイプのアイテムを含む EpubBook を返す (ファイルI/O不要)."""
-    png_bytes = (
-        b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
-        b"\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00"
-        b"\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00\x05\x18"
-        b"\xd8N\x00\x00\x00\x00IEND\xaeB`\x82"
-    )
+def book_with_cover_item():
     book = epub.EpubBook()
     book.set_identifier("test-cover-unit")
     cover = epub.EpubCover(file_name="images/cover.png")
     cover.media_type = "image/png"
-    cover.content = png_bytes
+    cover.content = _MINIMAL_PNG
     book.add_item(cover)
     return book
