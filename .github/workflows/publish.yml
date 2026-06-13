@@ -52,9 +52,57 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
 
+  verify-testpypi:
+    name: Verify cover extraction (TestPyPI)
+    needs: [build, publish-testpypi]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+
+      - name: Generate test EPUB with cover image
+        run: |
+          uv run --with ebooklib python -c "
+          from ebooklib import epub
+          _PNG = (
+              b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01'
+              b'\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00'
+              b'\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00\x05\x18'
+              b'\xd8N\x00\x00\x00\x00IEND\xaeB\x60\x82'
+          )
+          book = epub.EpubBook()
+          book.set_identifier('ci-cover-test')
+          book.set_title('CI Cover Test')
+          cover = epub.EpubCover(file_name='images/cover.png')
+          cover.media_type = 'image/png'
+          cover.content = _PNG
+          book.add_item(cover)
+          nav = epub.EpubNav()
+          book.add_item(nav)
+          book.spine = ['nav']
+          book.toc = []
+          epub.write_epub('test.epub', book)
+          "
+
+      - name: Wait for TestPyPI propagation
+        run: sleep 30
+
+      - name: Extract with uvx (version-pinned, no cache)
+        run: |
+          uvx --upgrade \
+            --from "epub-content-extractor==${{ needs.build.outputs.version }}" \
+            --index "https://test.pypi.org/simple/" \
+            --extra-index-url "https://pypi.org/simple/" \
+            --index-strategy unsafe-best-match \
+            epub-extract test.epub output/
+
+      - name: Verify cover image was extracted
+        run: test -s output/images/cover.png
+
   publish-pypi:
     name: Publish to PyPI
-    needs: publish-testpypi
+    needs: [publish-testpypi, verify-testpypi]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
