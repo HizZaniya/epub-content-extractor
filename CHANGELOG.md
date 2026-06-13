@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.4 (2026-06-13)
+
+### Fix
+
+- add skip_existing to TestPyPI publish step
+
 ## v0.2.3 (2026-06-13)
 
 ### Fix
