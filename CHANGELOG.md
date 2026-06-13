@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.5 (2026-06-13)
+
+### Fix
+
+- add --no-cache to uvx in verify-testpypi retry loop
+- replace fixed sleep with retry loop in verify-testpypi job
+
 ## v0.2.4 (2026-06-13)
 
 ### Fix
