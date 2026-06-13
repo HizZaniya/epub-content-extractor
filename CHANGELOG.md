@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.2 (2026-06-13)
+
+### Fix
+
+- improve tag check robustness in release workflow
+- handle missing tag in release workflow
+
 ## v0.2.1 (2026-06-12)
 
 ### Fix
