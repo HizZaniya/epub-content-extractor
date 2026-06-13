@@ -70,6 +70,35 @@ epub-content-extractor
 - **フィックス型**: `position: absolute` CSS座標によるソート（RTL/LTR対応）
 - **AHL型**: スパインアイテムごとにフィックス型/リフロー型を判定
 
+## TestPyPI での動作確認
+
+リリース前に TestPyPI へアップロードされたパッケージを `uvx` で検証する。
+
+TestPyPI には `lxml>=5.0` が存在しないため、`--extra-index-url` で PyPI を補助インデックスとして追加し、`--index-strategy unsafe-best-match` で全インデックスから最適バージョンを選択させる必要がある。
+
+```bash
+# MCP サーバーとして起動確認
+uvx --from "epub-content-extractor" \
+    --index "https://test.pypi.org/simple/" \
+    --extra-index-url "https://pypi.org/simple/" \
+    --index-strategy unsafe-best-match \
+    epub-content-extractor
+
+# CLI ツールとして動作確認
+uvx --from "epub-content-extractor" \
+    --index "https://test.pypi.org/simple/" \
+    --extra-index-url "https://pypi.org/simple/" \
+    --index-strategy unsafe-best-match \
+    epub-extract <EPUBファイルパス>
+
+# バージョンを指定する場合
+uvx --from "epub-content-extractor==0.2.2" \
+    --index "https://test.pypi.org/simple/" \
+    --extra-index-url "https://pypi.org/simple/" \
+    --index-strategy unsafe-best-match \
+    epub-content-extractor
+```
+
 ## 開発
 
 ```bash
