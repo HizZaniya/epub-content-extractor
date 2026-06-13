@@ -31,13 +31,4 @@ jobs:
         run: cz bump --yes
 
       - name: Push commit and tag
-        run: |
-          git push origin main
-          git push origin --tags
-
-      - name: Create GitHub Release
-        run: |
-          VERSION=$(grep '^version' pyproject.toml | head -1 | sed 's/.*"\(.*\)"/\1/')
-          gh release create "v${VERSION}" --title "v${VERSION}" --generate-notes
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: git push origin main --follow-tags
