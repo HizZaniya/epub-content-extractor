@@ -85,6 +85,9 @@ jobs:
           epub.write_epub('test.epub', book)
           "
 
+      - name: Wait for TestPyPI propagation
+        run: sleep 30
+
       - name: Extract with uvx (version-pinned, no cache)
         run: |
           uvx --upgrade \
@@ -95,7 +98,7 @@ jobs:
             epub-extract test.epub output/
 
       - name: Verify cover image was extracted
-        run: test -f output/images/cover.png
+        run: test -s output/images/cover.png
 
   publish-pypi:
     name: Publish to PyPI
