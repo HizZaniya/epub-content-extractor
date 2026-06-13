@@ -1,6 +1,9 @@
 name: Publish to PyPI
 
 on:
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
   release:
     types: [published]
 
@@ -10,6 +13,7 @@ permissions:
 jobs:
   build:
     name: Build distribution
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get_version.outputs.version }}
