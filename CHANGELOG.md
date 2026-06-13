@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.3 (2026-06-13)
+
+### Fix
+
+- extract cover images by media_type instead of ITEM_IMAGE type
+
+### Refactor
+
+- extract _MINIMAL_PNG constant to remove duplication
+
 ## v0.2.2 (2026-06-13)
 
 ### Fix
