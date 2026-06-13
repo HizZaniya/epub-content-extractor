@@ -91,7 +91,7 @@ jobs:
           VERSION="${{ needs.build.outputs.version }}"
           for i in $(seq 1 10); do
             echo "Attempt ${i}/10: installing epub-content-extractor==${VERSION} from TestPyPI..."
-            if uvx \
+            if uvx --no-cache \
               --from "epub-content-extractor==${VERSION}" \
               --index "https://test.pypi.org/simple/" \
               --extra-index-url "https://pypi.org/simple/" \
