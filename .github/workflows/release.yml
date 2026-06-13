@@ -44,3 +44,14 @@ jobs:
 
       - name: Push commit and tag
         run: git push origin main --follow-tags
+
+      - name: Create GitHub Release
+        run: |
+          VERSION=$(python3 -c "
+          import tomllib
+          with open('pyproject.toml', 'rb') as f:
+              print(tomllib.load(f)['project']['version'])
+          ")
+          gh release create "v${VERSION}" --title "v${VERSION}" --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
