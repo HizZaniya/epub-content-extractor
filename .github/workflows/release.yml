@@ -27,8 +27,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Bump version and generate CHANGELOG
-        run: cz bump --yes
+      - name: Bump version or recover missing tag
+        run: |
+          VERSION=$(python3 -c "import tomllib; d=tomllib.load(open('pyproject.toml','rb')); print(d['project']['version'])")
+          TAG="v${VERSION}"
+          if git rev-parse "${TAG}" >/dev/null 2>&1; then
+            cz bump --yes
+          else
+            echo "Recovery: version ${VERSION} has no tag. Creating annotated tag ${TAG}."
+            git tag -a "${TAG}" -m "chore: release ${TAG}"
+          fi
 
       - name: Push commit and tag
         run: git push origin main --follow-tags
