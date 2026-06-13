@@ -43,3 +43,19 @@ def test_no_images_returns_empty(reflowable_epub: Path, tmp_path: Path) -> None:
     book = epub.read_epub(str(reflowable_epub), {"ignore_ncx": True})
     mapping = extract_images(book, output_dir)
     assert mapping == {}
+
+
+def test_extract_images_includes_cover_type(
+    book_with_cover_item: epub.EpubBook, tmp_path: Path
+) -> None:
+    output_dir = tmp_path / "output"
+    extract_images(book_with_cover_item, output_dir)
+    assert (output_dir / "images" / "cover.png").exists()
+
+
+def test_extract_images_cover_in_mapping(
+    book_with_cover_item: epub.EpubBook, tmp_path: Path
+) -> None:
+    output_dir = tmp_path / "output"
+    mapping = extract_images(book_with_cover_item, output_dir)
+    assert any("cover.png" in k for k in mapping.keys())

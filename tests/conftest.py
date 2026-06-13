@@ -119,3 +119,21 @@ def epub_with_image(tmp_path):
     path = tmp_path / "with_image.epub"
     epub.write_epub(str(path), book)
     return path
+
+
+@pytest.fixture
+def book_with_cover_item() -> epub.EpubBook:
+    """ITEM_COVER タイプのアイテムを含む EpubBook を返す (ファイルI/O不要)."""
+    png_bytes = (
+        b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+        b"\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00"
+        b"\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00\x05\x18"
+        b"\xd8N\x00\x00\x00\x00IEND\xaeB`\x82"
+    )
+    book = epub.EpubBook()
+    book.set_identifier("test-cover-unit")
+    cover = epub.EpubCover(file_name="images/cover.png")
+    cover.media_type = "image/png"
+    cover.content = png_bytes
+    book.add_item(cover)
+    return book
