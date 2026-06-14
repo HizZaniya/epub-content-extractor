@@ -42,19 +42,70 @@ spine_order: 1
 ---
 ```
 
-## MCPサーバとして使う
+## MCPクライアント別の設定
 
-```bash
-epub-content-extractor
-```
+### Claude Code
 
-### MCPツール
+1. 以下のコマンドを実行します。
 
-| ツール名 | 説明 |
-|---|---|
-| `extract_epub` | EPUBの全コンテンツをMarkdownとして抽出 |
-| `get_epub_metadata` | EPUBのメタデータを取得（抽出なし） |
-| `list_epub_spine` | スパインアイテム（章）を一覧 |
+   ```bash
+   claude mcp add epub-content-extractor uvx epub-content-extractor
+   ```
+
+   または `.claude/mcp.json`（プロジェクトローカル）に以下を記述します。
+
+   ```json
+   {
+     "mcpServers": {
+       "epub-content-extractor": {
+         "command": "uvx",
+         "args": ["epub-content-extractor"]
+       }
+     }
+   }
+   ```
+
+2. Claude Code を再起動します。
+
+---
+
+### Cursor
+
+1. プロジェクトルートに `.cursor/mcp.json` を作成します（グローバル設定の場合は `~/.cursor/mcp.json`）。
+2. 以下の内容を記述します。
+
+   ```json
+   {
+     "mcpServers": {
+       "epub-content-extractor": {
+         "command": "uvx",
+         "args": ["epub-content-extractor"]
+       }
+     }
+   }
+   ```
+
+3. Cursor を再起動します。
+
+---
+
+### VS Code (GitHub Copilot)
+
+1. プロジェクトルートに `.vscode/mcp.json` を作成します。
+2. 以下の内容を記述します。
+
+   ```json
+   {
+     "servers": {
+       "epub-content-extractor": {
+         "command": "uvx",
+         "args": ["epub-content-extractor"]
+       }
+     }
+   }
+   ```
+
+3. VS Code を再起動し、Copilot Chat から MCP ツールが利用可能になっていることを確認します.
 
 ## 対応EPUBレイアウト
 
