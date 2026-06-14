@@ -6,45 +6,6 @@ EPUBファイルのテキストと画像を抽出し、Markdownファイル群�
 
 - **uv** — パッケージマネージャ。[公式インストール手順](https://docs.astral.sh/uv/getting-started/installation/)に従ってインストールしてください。
 
-## CLIとして直接使う（uvx経由）
-
-> **注意**: `uvx epub-content-extractor` は MCP サーバーを起動するコマンドです。ヘルプは表示されません。
-> CLI ツールのエントリポイントは `epub-extract` です。uvx 経由では `--from` フラグを使って以下のように実行します。
-
-```bash
-uvx --from epub-content-extractor epub-extract INPUT.epub [OUTPUT_DIR]
-```
-
-- `INPUT.epub`: 入力EPUBファイルのパス（必須）
-- `OUTPUT_DIR`: 出力先ディレクトリ（省略時は `{epub_dir}/{epub_stem}/`）
-
-### 出力例
-
-```
-output/
-├── chapter_001.md
-├── chapter_002.md
-└── images/
-    └── fig001.png
-```
-
-各 `.md` ファイルはYAML Front Matter付き:
-
-```yaml
----
-title: "書籍タイトル"
-authors:
-  - "著者名"
-language: ja
-publisher: "出版社"
-identifier: "urn:isbn:..."
-epub_layout: fixed-layout
-page_progression_direction: rtl
-chapter_title: "第1章"
-spine_order: 1
----
-```
-
 ## MCPクライアント別の設定
 
 ### Claude Code
@@ -55,7 +16,7 @@ spine_order: 1
    claude mcp add epub-content-extractor uvx epub-content-extractor
    ```
 
-   または `.claude/mcp.json`（プロジェクトローカル）に以下を記述します。
+   または プロジェクトルートに `.mcp.json` を作成し、以下を記述します。
 
    ```json
    {
@@ -109,6 +70,47 @@ spine_order: 1
    ```
 
 3. VS Code を再起動し、Copilot Chat から MCP ツールが利用可能になっていることを確認します。
+
+## CLIとして直接使う（uvx経由）
+
+> **注意**: `uvx epub-content-extractor` は MCP サーバーを起動するコマンドです。ヘルプは表示されません。
+> CLI ツールのエントリポイントは `epub-extract` です。uvx 経由では `--from` フラグを使って以下のように実行します。
+
+```bash
+uvx --from epub-content-extractor epub-extract INPUT.epub [OUTPUT_DIR]
+```
+
+- `INPUT.epub`: 入力EPUBファイルのパス（必須）
+- `OUTPUT_DIR`: 出力先ディレクトリ（省略時は `{epub_dir}/{epub_stem}/`）
+
+### 出力例
+
+```
+output/
+├── chapter_001.md
+├── chapter_002.md
+└── images/
+    └── fig001.png
+```
+
+各 `.md` ファイルはYAML Front Matter付き:
+
+```yaml
+---
+title: "書籍タイトル"
+authors:
+  - "著者名"
+language: ja
+publisher: "出版社"
+identifier: "urn:isbn:..."
+epub_layout: fixed-layout
+page_progression_direction: rtl
+chapter_title: "第1章"
+spine_order: 1
+---
+```
+
+---
 
 ## ツールリファレンス
 
