@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.6 (2026-06-14)
+
+### Fix
+
+- skip existing files on PyPI publish to prevent 400 error on re-release
+
 ## v0.2.5 (2026-06-13)
 
 ### Fix
