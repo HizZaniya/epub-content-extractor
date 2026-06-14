@@ -2,17 +2,9 @@
 
 EPUBファイルのテキストと画像を抽出し、Markdownファイル群として出力するCLIツール。FastMCPによるMCPサーバとしても動作します。
 
-## インストール
+## 必要なもの
 
-```bash
-pip install epub-content-extractor
-```
-
-uvxで直接実行:
-
-```bash
-uvx epub-content-extractor --help
-```
+- **uv** — パッケージマネージャ。[公式インストール手順](https://docs.astral.sh/uv/getting-started/installation/)に従ってインストールしてください。
 
 ## CLIの使い方
 
