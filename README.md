@@ -105,7 +105,7 @@ spine_order: 1
    }
    ```
 
-3. VS Code を再起動し、Copilot Chat から MCP ツールが利用可能になっていることを確認します.
+3. VS Code を再起動し、Copilot Chat から MCP ツールが利用可能になっていることを確認します。
 
 ## 対応EPUBレイアウト
 
