@@ -6,10 +6,13 @@ EPUBファイルのテキストと画像を抽出し、Markdownファイル群�
 
 - **uv** — パッケージマネージャ。[公式インストール手順](https://docs.astral.sh/uv/getting-started/installation/)に従ってインストールしてください。
 
-## CLIの使い方
+## CLIとして直接使う（uvx経由）
+
+> **注意**: `uvx epub-content-extractor` は MCP サーバーを起動するコマンドです。ヘルプは表示されません。
+> CLI ツールのエントリポイントは `epub-extract` です。uvx 経由では `--from` フラグを使って以下のように実行します。
 
 ```bash
-epub-extract INPUT.epub [OUTPUT_DIR]
+uvx --from epub-content-extractor epub-extract INPUT.epub [OUTPUT_DIR]
 ```
 
 - `INPUT.epub`: 入力EPUBファイルのパス（必須）
