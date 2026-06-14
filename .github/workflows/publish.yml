@@ -122,6 +122,8 @@ jobs:
           path: dist/
 
       - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip_existing: true
 
   install-test:
     name: Install test from PyPI
