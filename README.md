@@ -110,6 +110,87 @@ spine_order: 1
 
 3. VS Code を再起動し、Copilot Chat から MCP ツールが利用可能になっていることを確認します。
 
+## ツールリファレンス
+
+### `extract_epub`
+
+EPUBの全コンテンツをMarkdownファイルとして出力します。
+
+#### パラメータ
+
+| パラメータ | 型 | デフォルト | 説明 |
+|---|---|---|---|
+| `source` | string | 必須 | EPUBファイルの絶対パスまたは相対パス |
+| `output_dir` | string | null | 出力先ディレクトリ（省略時は `{epub_dir}/{epub_stem}/`）|
+
+#### レスポンス
+
+```json
+{
+  "output_dir": "/path/to/output",
+  "files": [
+    "/path/to/output/chapter_001.md",
+    "/path/to/output/chapter_002.md"
+  ],
+  "chapters": 2
+}
+```
+
+---
+
+### `get_epub_metadata`
+
+EPUBのメタデータを取得します（ファイル出力なし）。
+
+#### パラメータ
+
+| パラメータ | 型 | デフォルト | 説明 |
+|---|---|---|---|
+| `source` | string | 必須 | EPUBファイルの絶対パスまたは相対パス |
+
+#### レスポンス
+
+```json
+{
+  "title": "書籍タイトル",
+  "authors": ["著者名"],
+  "language": "ja",
+  "layout": "fixed-layout",
+  "page_progression_direction": "rtl",
+  "publisher": "出版社",
+  "identifier": "urn:isbn:..."
+}
+```
+
+---
+
+### `list_epub_spine`
+
+スパインアイテム（章）を読み順で一覧表示します（ファイル出力なし）。
+
+#### パラメータ
+
+| パラメータ | 型 | デフォルト | 説明 |
+|---|---|---|---|
+| `source` | string | 必須 | EPUBファイルの絶対パスまたは相対パス |
+
+#### レスポンス
+
+```json
+{
+  "spine": [
+    {
+      "id": "chapter01",
+      "href": "OEBPS/chapter01.xhtml",
+      "title": "第1章",
+      "order": 1
+    }
+  ]
+}
+```
+
+---
+
 ## 対応EPUBレイアウト
 
 - **リフロー型**: HTML構造から自然な読み順でテキスト抽出
