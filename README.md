@@ -197,7 +197,24 @@ EPUBのメタデータを取得します（ファイル出力なし）。
 - **フィックス型**: `position: absolute` CSS座標によるソート（RTL/LTR対応）
 - **AHL型**: スパインアイテムごとにフィックス型/リフロー型を判定
 
-## TestPyPI での動作確認
+---
+
+## 開発者向け
+
+### 開発環境のセットアップ
+
+```bash
+uv sync --group dev
+```
+
+### テスト・Lint
+
+```bash
+uv run pytest tests/ -v
+uv run ruff check .
+```
+
+### TestPyPI での動作確認
 
 リリース前に TestPyPI へアップロードされたパッケージを `uvx` で検証する。
 
@@ -224,12 +241,4 @@ uvx --from "epub-content-extractor==0.2.2" \
     --extra-index-url "https://pypi.org/simple/" \
     --index-strategy unsafe-best-match \
     epub-content-extractor
-```
-
-## 開発
-
-```bash
-uv sync --group dev
-uv run pytest tests/ -v
-uv run ruff check .
 ```
